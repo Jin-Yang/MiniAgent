@@ -1,0 +1,10 @@
+/* Define to 1 if you have the <sys/epoll.h> header file. */
+#cmakedefine HAVE_SYS_EPOLL_H   1
+/* Define to 1 if you have the `epoll_ctl' function. */
+#cmakedefine HAVE_EPOLL_CTL     1
+/* Define to 1 if you have the `clock_gettime' function. */
+#cmakedefine HAVE_CLOCK_GETTIME 1
+/* Define to 1 if the floor function is available */
+#cmakedefine HAVE_FLOOR         1
+/* Define to 1 if you have the `nanosleep' function. */
+#cmakedefine HAVE_NANOSLEEP     1

@@ -84,7 +84,7 @@ ENDIF(${WITH_UNIT_TESTS})
 #INCLUDE(contrib/cmake/CPackConfig.cmake)
 #INCLUDE(CPack)
 
-#ADD_SUBDIRECTORY(libs)
+ADD_SUBDIRECTORY(libs)
 ADD_SUBDIRECTORY(daemon)
 
 MESSAGE(STATUS "=============== CONFIGURATION ===============")
