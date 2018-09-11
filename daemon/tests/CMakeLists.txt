@@ -1,3 +1,6 @@
+ADD_EXECUTABLE(testing testing.c ../testing.h)
+ADD_TEST(NAME testing COMMAND ${WRAPPER_CMD} ./testing)
+
 #ADD_EXECUTABLE(tping ping.c ev_mock.c)
 #TARGET_LINK_LIBRARIES(tping libz.a)
 #TARGET_COMPILE_OPTIONS(tping PRIVATE "-DPING_MOCK=2")
