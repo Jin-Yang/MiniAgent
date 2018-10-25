@@ -1,14 +1,5 @@
 
-#ADD_SUBDIRECTORY(libconfig)
-#ADD_SUBDIRECTORY(libconhash)
-#ADD_SUBDIRECTORY(libcron)
 ADD_SUBDIRECTORY(libev)
 #ADD_SUBDIRECTORY(libhttp)
-#ADD_SUBDIRECTORY(libjson)
-#ADD_SUBDIRECTORY(liblog)
-#ADD_SUBDIRECTORY(libmsgpack)
-#ADD_SUBDIRECTORY(libprotocol)
-#ADD_SUBDIRECTORY(libstatsdc)
-#ADD_SUBDIRECTORY(libutil)
-#ADD_SUBDIRECTORY(libwebsocket)
-#
+ADD_SUBDIRECTORY(liblog)
+

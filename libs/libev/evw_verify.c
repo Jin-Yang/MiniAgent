@@ -26,7 +26,7 @@ static void noinline ecb_cold verify_heap(EV_P_ ANHE *heap, int N)
 		verify_watcher(EV_A_ (W)ANHE_w(heap[i]));
 	}
 }
-
+#if 0
 static void noinline ecb_cold array_verify(EV_P_ W *ws, int cnt)
 {
 	while (cnt--) {
@@ -35,6 +35,7 @@ static void noinline ecb_cold array_verify(EV_P_ W *ws, int cnt)
 		verify_watcher(EV_A_ ws[cnt]);
 	}
 }
+#endif
 #endif
 
 #if EV_FEATURE_API

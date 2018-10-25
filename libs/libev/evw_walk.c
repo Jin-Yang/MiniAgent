@@ -2,7 +2,7 @@
 #if EV_WALK_ENABLE
 void ecb_cold ev_walk(EV_P_ int types, void (*cb)(EV_P_ int type, void *w)) EV_THROW
 {
-	int i, j;
+	int i; //, j;
 	struct ev_watcher_list *wl, *wn;
 
 	if (types & (EV_IO | EV_EMBED))

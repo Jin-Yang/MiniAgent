@@ -11,14 +11,15 @@ void noinline ev_timer_start(EV_P_ ev_timer *w) EV_THROW
 
 	++timercnt;
 	ev_start(EV_A_ (W)w, timercnt + HEAP0 - 1);
-	array_needsize(ANHE, timers, timermax, ev_active (w) + 1, EMPTY2);
+	array_needsize(ANHE, timers, timermax, ev_active(w) + 1, EMPTY2);
 	ANHE_w(timers[ev_active(w)]) = (WT)w;
 	ANHE_at_cache(timers[ev_active(w)]);
 	upheap(timers, ev_active(w));
 
 	EV_FREQUENT_CHECK;
 
-	assert(ANHE_w(timers[ev_active(w)]) == (WT)w); /* internal timer heap corruption */
+	/* internal timer heap corruption */
+	assert(ANHE_w(timers[ev_active(w)]) == (WT)w);
 }
 
 void noinline ev_timer_stop(EV_P_ ev_timer *w) EV_THROW

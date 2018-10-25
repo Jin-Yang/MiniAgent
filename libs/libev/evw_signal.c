@@ -10,9 +10,9 @@ void noinline ev_signal_start (EV_P_ ev_signal *w) EV_THROW
 
 #if EV_MULTIPLICITY
 	/* a signal must not be attached to two different loops */
-	assert(!signals[w->signum - 1].loop || signals [w->signum - 1].loop == loop);
+	assert(!signals[w->signum - 1].loop || signals[w->signum - 1].loop == loop);
 
-	signals [w->signum - 1].loop = EV_A;
+	signals[w->signum - 1].loop = EV_A;
 	ECB_MEMORY_FENCE_RELEASE;
 #endif
 
@@ -22,7 +22,7 @@ void noinline ev_signal_start (EV_P_ ev_signal *w) EV_THROW
 	if (sigfd == -2) {
 		sigfd = signalfd(-1, &sigfd_set, SFD_NONBLOCK | SFD_CLOEXEC);
 		if (sigfd < 0 && errno == EINVAL)
-			sigfd = signalfd (-1, &sigfd_set, 0); /* retry without flags */
+			sigfd = signalfd(-1, &sigfd_set, 0); /* retry without flags */
 		if (sigfd >= 0) {
 			fd_intern(sigfd); /* doing it twice will not hurt */
 

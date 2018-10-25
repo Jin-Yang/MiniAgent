@@ -12,8 +12,7 @@ SET(CMAKE_C_COMPILER      "gcc")
 SET(CMAKE_C_FLAGS         "-std=c99 -Wall -Wextra")
 SET(CMAKE_C_FLAGS         "${CMAKE_C_FLAGS} -Wno-sign-compare -Wno-unused-parameter")
 
-#SET(CMAKE_C_FLAGS_DEBUG   "-O0 -g" )
-SET(CMAKE_C_FLAGS_DEBUG   "-O0")
+SET(CMAKE_C_FLAGS_DEBUG   "-O0 -g")
 SET(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG " )
 #SET(LIBPATH /usr/lib /usr/local/lib)
 

@@ -2,8 +2,10 @@
 #ifndef TESTING_H_
 #define TESTING_H_ 1
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <inttypes.h>
 
 static int fail_count__ = 0;

@@ -1,9 +1,9 @@
-#include <libev/ev.h>       // a single header file is required
-#include <time.h>     // for time()
-#include <stdio.h>    // for printf()
-#include <stdint.h>   // for uintmax_t
+#include <time.h>
+#include <stdio.h>
+#include <stdint.h>
 
-// every watcher type has its own typedef'd struct with the name ev_TYPE
+#include "libev/ev.h"
+
 ev_timer timeout_watcher;
 ev_timer repeate_watcher;
 ev_timer oneshot_watcher;
@@ -14,7 +14,8 @@ static void timeout_cb (EV_P_ ev_timer *w, int revents)
         (void) w;
         (void) revents;
         printf("timeout at %ju\n", (uintmax_t)time(NULL));
-        // this causes the innermost ev_run to stop iterating
+
+        /* this causes the innermost ev_run to stop iterating */
         ev_break (EV_A_ EVBREAK_ONE);
 }
 static void repeate_cb (EV_P_ ev_timer *w, int revents)
@@ -39,22 +40,20 @@ int main (void)
         result = time(NULL);
         printf("  start at %ju\n", (uintmax_t)result);
 
-        // 2秒后执行函数
-        //ev_timer_init (&oneshot_watcher, oneshot_cb, 2.0, 0.);
-        ev_timer_init (&oneshot_watcher, oneshot_cb, 2.0, 1.);
-        ev_timer_start (EV_A_ &oneshot_watcher);
+        /* run only once in 2s later */
+        ev_timer_init(&oneshot_watcher, oneshot_cb, 2.0, 0.);
+        ev_timer_start(EV_A_ &oneshot_watcher);
 
-        // 5秒后开始循环，每次间隔1秒，如果最后一个参数为0，则只执行一次
-        ev_timer_init (&repeate_watcher, repeate_cb, 5., 1.);
-        ev_timer_start (EV_A_ &repeate_watcher);
+        /* run in 5 seconds later, and repeat every second */
+        ev_timer_init(&repeate_watcher, repeate_cb, 5., 1.);
+        ev_timer_start(EV_A_ &repeate_watcher);
 
-        // 10秒后执行超时，设置为-1表示不退出
-        ev_timer_init (&timeout_watcher, timeout_cb, 10., 0.);
-        ev_timer_start (EV_A_ &timeout_watcher);
+        /* timeout in 10s later, and also quit. */
+        ev_timer_init(&timeout_watcher, timeout_cb, 10., 0.);
+        ev_timer_start(EV_A_ &timeout_watcher);
 
-        // now wait for events to arrive
+        /* now wait for events to arrive. */
         ev_run(EV_A_ 0);
 
-        // break was called, so exit
         return 0;
 }

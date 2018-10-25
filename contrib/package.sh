@@ -13,7 +13,7 @@ if [ $# -lt 2 ]; then
         exit 1;
 fi
 
-if [ ! -f "README.md" ]; then
+if [ ! -f "contrib/generate_version.sh" ]; then
         echo "ERROR: this script MUST run on the top of source code"
         exit 1;
 fi
@@ -22,6 +22,7 @@ command -v rpmbuild >/dev/null 2>&1 || { echo "ERROR: command 'rpmbuild' doesn't
 
 PACKAGE_NAME=${1}
 PROJECT_VERSION=${2}
+GENER_VERSION="`contrib/generate_version.sh`"
 RPM_DIR="`pwd`/rpm-maker"
 SPEC_FILE="`pwd`/contrib/${PACKAGE_NAME}.spec"
 PKG_VERSION=${PROJECT_VERSION%-*}
@@ -30,6 +31,11 @@ if [ ${PKG_RELEASE} == ${PKG_VERSION} ]; then
 	PKG_RELEASE='0'
 fi
 PACKAGE_TAR="${PACKAGE_NAME}-${PKG_VERSION}-${PKG_RELEASE}.tar.bz2"
+
+if [ x${PROJECT_VERSION} != x${GENER_VERSION} ]; then
+        echo "ERROR: unequal version, generate version ${GENER_VERSION}."
+        exit 1;
+fi
 
 echo "Package RPM, Version(${PKG_VERSION}) Release(${PKG_RELEASE})."
 echo "++++++++++++++++++++++++++ step 0 ++++++++++++++++++++++++++++++"
