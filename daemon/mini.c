@@ -30,8 +30,9 @@ static void exit_usage(int status)
 		"             builtin: " PROJECT_PID_FILE "\n"
 		"    -h                Display help (this message).\n\n"
 		"Builtin Variables:\n"
-		"Version: " PROJECT_VERSION "\n"
-		"Compile: " __DATE__ " "  __TIME__ "\n");
+		" Version: " PROJECT_VERSION "\n"
+		"CommitID: " PROJECT_COMMIT_ID "\n"
+		" Compile: " __DATE__ " "  __TIME__ "\n");
 
 	exit(status);
 }

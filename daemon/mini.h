@@ -17,6 +17,10 @@
 #define PROJECT_VERSION   "0.1.0"
 #endif
 
+#ifndef PROJECT_COMMIT_ID
+#define PROJECT_COMMIT_ID "not a git repository"
+#endif
+
 #ifndef PROJECT_PID_FILE
 #define PROJECT_PID_FILE  "MiniAgent.pid"
 #endif

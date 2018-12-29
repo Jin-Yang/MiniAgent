@@ -18,7 +18,7 @@ It is a RPM example.
 
 #--- 3.The Build Section
 %build
-mkdir build && cd build && cmake ..
+mkdir build && cd build && cmake .. -DPROJECT_COMMIT_ID="%{commitid}"
 make %{?_smp_mflags}
 #echo %{_sysconfdir}
 

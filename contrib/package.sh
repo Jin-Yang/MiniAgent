@@ -31,9 +31,10 @@ if [ ${PKG_RELEASE} == ${PKG_VERSION} ]; then
 	PKG_RELEASE='0'
 fi
 PACKAGE_TAR="${PACKAGE_NAME}-${PKG_VERSION}-${PKG_RELEASE}.tar.bz2"
+PKG_COMMITID=` git rev-parse HEAD`
 
-if [ x${PROJECT_VERSION} != x${GENER_VERSION} ]; then
-        echo "ERROR: unequal version, generate version ${GENER_VERSION}."
+if [ x${PKG_VERSION} != x${GENER_VERSION} ]; then
+        echo "ERROR: unequal version, generate version ${PROJECT_VERSION} != ${GENER_VERSION}."
         exit 1;
 fi
 
@@ -70,5 +71,6 @@ echo "++++++++++++++++++++++++++ step 2 ++++++++++++++++++++++++++++++"
 rpmbuild --define "_topdir ${RPM_DIR}"                       \
          --define "pkg_version ${PKG_VERSION}"               \
          --define "pkg_release ${PKG_RELEASE}"               \
+         --define "commitid ${PKG_COMMITID}"                 \
 	 -ba "${RPM_DIR}"/SPECS/${PACKAGE_NAME}.spec
 
