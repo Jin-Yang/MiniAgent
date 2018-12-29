@@ -29,18 +29,27 @@
         #define LOG_DEBUG       7       /* (used)debug-level messages */
 #endif
 #define LOG_DEBUG0              8       /* (used)more details for debug-level */
+#define LOG_TRACE               8       /* (used)more details for debug-level */
 #define LOG_LEVEL_NUM           9
+#define LOG_LEVEL_MAX           8
+#define LOG_LEVEL_MIN           0
 #define LOG_DEF_LEVEL           LOG_INFO
 
 #ifdef FEATURE_LOG_PROCESS
 #define log_init                log_init_process
 #define log_it                  log_it_process
+#define log_level_inc           log_inc_process
+#define log_level_dec           log_dec_process
 #elif defined FEATURE_LOG_STDOUT
 #define log_init                log_init_stdout
 #define log_it                  log_it_stdout
+#define log_level_inc           log_inc_stdout
+#define log_level_dec           log_dec_stdout
 #elif defined FEATURE_LOG_THREAD
 #define log_init                log_init_thread
 #define log_it                  log_it_thread
+#define log_level_inc           log_inc_thread
+#define log_level_dec           log_dec_thread
 #else
 #include <stdio.h>
 #define log_init(f, l)
@@ -63,6 +72,7 @@
 #define LOG_MACRO
 #endif
 
+const char *log_get_name(const int level);
 int log_get_level(const char *level);
 void log_inner(int severity, const char *fmt, ...);
 int log_buffer_format(char *buffer, int severity, const char *fmt, va_list ap);
@@ -76,6 +86,15 @@ void log_it_thread(int severity, const char * const fmt, ...);
 void log_it_process(int severity, const char * const fmt, ...);
 void log_it_stdout(int severity, const char * const fmt, ...);
 
+/* more logs */
+int log_dec_thread(void);
+int log_dec_process(void);
+int log_dec_stdout(void);
+
+int log_inc_thread(void);
+int log_inc_process(void);
+int log_inc_stdout(void);
+
 #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
 	#define _debug(...)            do { log_inner(LOG_DEBUG,   __VA_ARGS__); } while(0)
 	#define _warn(...)             do { log_inner(LOG_WARNING, __VA_ARGS__); } while(0)
@@ -88,6 +107,7 @@ void log_it_stdout(int severity, const char * const fmt, ...);
 	#define log_info(...)          do { log_it(LOG_INFO,    __VA_ARGS__); } while(0)
 	#define log_debug(...)         do { log_it(LOG_DEBUG,   __VA_ARGS__); } while(0)
 	#define log_debug0(...)        do { log_it(LOG_DEBUG0,  __VA_ARGS__); } while(0)
+	#define log_trace(...)         do { log_it(LOG_TRACE,   __VA_ARGS__); } while(0)
 #elif defined __GNUC__
 	#define _debug(fmt, args...)   do { log_inner(LOG_DEBUG,   fmt, ## args); } while(0)
 	#define _warn(fmt, args...)    do { log_inner(LOG_WARNING, fmt, ## args); } while(0)
@@ -100,6 +120,7 @@ void log_it_stdout(int severity, const char * const fmt, ...);
 	#define log_info(...)          do { log_it(LOG_INFO,    fmt, ## args); } while(0)
 	#define log_debug(...)         do { log_it(LOG_DEBUG,   fmt, ## args); } while(0)
 	#define log_debug0(...)        do { log_it(LOG_DEBUG0,  fmt, ## args); } while(0)
+	#define log_trace(...)         do { log_it(LOG_TRACE,   fmt, ## args); } while(0)
 #endif
 #endif
 

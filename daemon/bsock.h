@@ -48,24 +48,10 @@ struct ev_bsock {
 	char ipaddr[INET6_ADDRSTRLEN];
 	char ipport[INET_PORT_LEN]; /* max 65536 */
 
-
-
 	struct ev_io wsock, rsock;
 	struct ev_timer rtimer, wtimer;
 
 	struct ev_buff *wbuf, *rbuf;
-
-#if 0
-    struct ev_io read_ev;
-    struct ev_io write_ev;
-    struct Buffer *read_buf;
-    struct Buffer *write_buf;
-    struct ev_timer read_bytes_timer_ev;
-    size_t read_bytes_n;
-    void (*read_bytes_callback)(struct BufferedSocket *buffsock, void *arg);
-    void *read_bytes_arg;
-    struct ev_loop *loop;
-#endif
 
 	void (*read)(struct ev_bsock *bs, struct ev_buff *buf, void *arg);
 	void (*write)(struct ev_bsock *bs, void *arg);
@@ -74,6 +60,7 @@ struct ev_bsock {
 	void (*connect)(struct ev_bsock *bs, void *arg);
 	void (*close)(struct ev_bsock *bs, void *arg);
 	void (*error)(struct ev_bsock *bs, int err, void *arg);
+
 	void *arg;
 	int errnum;
 	char errmsg[128];
@@ -84,7 +71,7 @@ struct ev_bsock {
         ev_timer_start(EV_A_ &(bs)->wtimer);                                \
 } while(0)
 
-#define bsock_set_arg(bs, arg_)     (bs)->arg = (arg_)
+#define bsock_set_arg(bs, arg_)    (bs)->arg = (arg_)
 #define bsock_set_read(bs, cb)     (bs)->read = (cb)
 #define bsock_set_write(bs, cb)    (bs)->write = (cb)
 #define bsock_set_event(bs, cb)    (bs)->event = (cb)
@@ -99,12 +86,11 @@ struct ev_bsock {
 #define buff_length(buf)   ((buf)->tail - (buf)->start)
 #define buff_restart(buf)  (buf)->tail = (buf)->start;
 #define buff_string(buf)   ((buf)->start)
-#define buff_seal(buf)                          \
-	do {                                    \
-		if ((buf)->end == (buf)->tail)  \
-			*((buf)->tail - 1) = 0; \
-		else                            \
-			*(buf)->tail = 0;       \
+#define buff_seal(buf) do {             \
+	if ((buf)->end == (buf)->tail)  \
+		*((buf)->tail - 1) = 0; \
+	else                            \
+		*(buf)->tail = 0;       \
 } while(0)
 int buff_drain(struct ev_buff *buff, int len);
 

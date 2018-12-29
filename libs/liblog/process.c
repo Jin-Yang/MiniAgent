@@ -110,3 +110,18 @@ void log_it_process(int severity, const char * const fmt, ...)
 	}
 }
 
+/* more logs */
+int log_dec_process(void)
+{
+	if (log_level < LOG_LEVEL_MAX)
+		log_level++;
+	return log_level;
+}
+
+int log_inc_process(void)
+{
+	if (log_level > LOG_LEVEL_MIN)
+		log_level--;
+	return log_level;
+}
+

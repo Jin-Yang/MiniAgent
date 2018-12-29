@@ -11,6 +11,7 @@
 
 #include <sys/syscall.h>
 
+
 int log_buffer_format(char *buffer, int severity, const char *fmt, va_list ap)
 {
         static char _log[LOG_LEVEL_NUM] = { 'E', 'A', 'C', 'E', 'W', 'N', 'I', 'D', '0' };
@@ -70,8 +71,23 @@ int log_get_level(const char *level)
 		return LOG_DEBUG;
 	else if (strcasecmp(level, "debug0") == 0)
 		return LOG_DEBUG0;
+	else if (strcasecmp(level, "trace") == 0)
+		return LOG_TRACE;
 
 	return -1;
+}
+
+const char *log_get_name(const int level)
+{
+	static const char *lvlname[] = {
+		"emerg", "alert", "critical", "error",
+		"warning", "notice", "info", "debug", "trace"
+	};
+
+	if (level < LOG_LEVEL_MIN || level > LOG_LEVEL_MAX)
+		return "invalid";
+
+	return lvlname[level];
 }
 
 void log_inner(int severity, const char *fmt, ...)

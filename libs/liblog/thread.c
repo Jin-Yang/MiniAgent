@@ -179,3 +179,18 @@ int log_init_thread(const char *file, int level)
         return 0;
 }
 
+/* more logs */
+int log_dec_thread(void)
+{
+	if (log_level < LOG_LEVEL_MAX)
+		log_level++;
+	return log_level;
+}
+
+int log_inc_thread(void)
+{
+	if (log_level > LOG_LEVEL_MIN)
+		log_level--;
+	return log_level;
+}
+

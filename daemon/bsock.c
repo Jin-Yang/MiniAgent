@@ -107,7 +107,7 @@ static void bsock_timer_cb(EV_P_ ev_timer *w, int revents)
 
 	bs = w->data;
 	ev_timer_stop(EV_A_ &bs->wtimer);
-	log_debug0(MOD "timer callback, current state <%s>.",
+	log_trace(MOD "timer callback, current state <%s>.",
 			BS_STATE[bs->state]);
 
 	switch (bs->state) {
@@ -149,10 +149,17 @@ struct ev_bsock *bsock_create(int wbsize, int rbsize)
 		return NULL;
 	bs->state = BS_INIT;
 
-	bs->wbuf = buff_create(wbsize);
-	bs->rbuf = buff_create(rbsize);
-	if (bs->wbuf == NULL || bs->rbuf == NULL)
-		goto nomem;
+	if (wbsize > 0) {
+		bs->wbuf = buff_create(wbsize);
+		if (bs->wbuf == NULL)
+			goto nomem;
+	}
+
+	if (rbsize > 0) {
+		bs->rbuf = buff_create(rbsize);
+		if (bs->rbuf == NULL)
+			goto nomem;
+	}
 
 	ev_init(&bs->wtimer, bsock_timer_cb);
 	bs->wtimer.data = bs;
@@ -309,12 +316,11 @@ static void bsock_connect_cb(EV_P_ ev_io *w, int revents)
 	}
 
 	if (error) {
-		log_error(MOD "connect to '%s:%s' failed, %s.", bs->ipaddr,
-				bs->ipport, strerror(error));
+		log_error(MOD "connect to '%s:%s' failed, %s.",
+				bs->ipaddr, bs->ipport, strerror(error));
 		bsock_close(bs);
 		if (bs->event)
 			(*bs->event)(bs, BSEV_ERRCONN, bs->arg);
-		//bsock_error("connect failed", error, BSEV_ERRCONN);
 		return;
 	}
 
@@ -354,7 +360,7 @@ int bsock_set_sock(struct ev_bsock *bs, struct addrinfo *addr)
 
 void bsock_close(struct ev_bsock *bs)
 {
-	log_debug(MOD "closing '%s:%s'(%s) on fd #%d.", 
+	log_debug(MOD "closing '%s:%s'(%s) on fd #%d.",
 			bs->ipaddr, bs->ipport, BS_STATE[bs->state], bs->fd);
 
 	if (bs->state == BS_DISCONNECTED || bs->state == BS_INIT)
