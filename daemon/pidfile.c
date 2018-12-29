@@ -1,5 +1,4 @@
 
-#include "mini.h"
 #include "liblog/log.h"
 
 #include <errno.h>
@@ -11,6 +10,11 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#ifndef PROJECT_NAME
+#define PROJECT_NAME "Invalid Project Name"
+//#error "Project name is not defined."
+#endif
 
 
 int pidfile_check(const char *file)
@@ -71,18 +75,17 @@ int pidfile_check(const char *file)
 	}
 	buffer[rc - 1] = 0; /* skip '\n' */
 
-	if (strcmp(PROJECT_NAME, buffer) == 0) {
-		log_error("process(%d) already exists.", pid);
+	if (strcmp(PROJECT_NAME, buffer) != 0) {
+		log_error("file '/proc/%d/comm' exists, but (" PROJECT_NAME ") != (%s).",
+				pid, buffer);
 		close(fd);
 		return -1;
 	}
-	log_warning("file '/proc/%d/comm' exists, but (" PROJECT_NAME ") != (%s).",
-			pid, buffer);
+	log_error("process(%d) already exists.", pid);
 	close(fd);
 
-	return 0;
+	return 1;
 }
-
 
 int pidfile_update(const char *file)
 {

@@ -103,9 +103,20 @@ static void mini_error(struct ev_bsock *bs, int err, void *arg)
 
 static void repeate_foobar(EV_P_ ev_timer *w, int revents)
 {
-        (void) w;
-        (void) revents;
 	log_info("repeat event %d, %p", revents, w);
+}
+
+static void signal_handler_cb(EV_P_ ev_signal *w, int revents)
+{
+	(void) revents;
+
+	switch (w->signum) {
+	case SIGINT:
+		log_error("got SIGINT, quit now.");
+		break;
+	}
+
+	ev_break(EV_A_ EVBREAK_ALL);
 }
 
 int main(int argc, char *argv[])
@@ -117,6 +128,7 @@ int main(int argc, char *argv[])
 	char *loglevel = "info";
 	pid_t pid;
 	ev_timer wtimer;
+	struct ev_signal wsigint;
 
 	while (1) {
 		rc = getopt(argc, argv, "hfP:");
@@ -151,8 +163,8 @@ int main(int argc, char *argv[])
 		return -1;
 	log_info("=================== BEGIN >>>>>>>>>>>>>>>>>>>");
 
-	if (pidfile_check(pidfile) < 0) { /* Write pidfile */
-		fprintf(stderr, "Process already exists, quit now.\n");
+	if (pidfile_check(pidfile) != 0) {
+		fprintf(stderr, "Check PIDFile '%s' failed, details check the log.\n", pidfile);
 		goto leave;
 	}
 
@@ -189,18 +201,23 @@ int main(int argc, char *argv[])
                         log_error("redirect 'STDERR' to '/dev/null' failed, rc %d", rc);
                         exit(EXIT_FAILURE);
                 }
-
-		if (pidfile_update(pidfile) < 0) /* Write pidfile */
-			exit(EXIT_FAILURE);
 	}
 
+	if (pidfile_update(pidfile) < 0) {
+		log_error("Create pidfile '%s' failed.", pidfile);
+		fprintf(stderr, "Create pidfile '%s' failed.\n", pidfile);
+		goto leave;
+	}
+
+	ev_signal_init(&wsigint, signal_handler_cb, SIGINT);
+	ev_signal_start(EV_A_ &wsigint);
 	ev_timer_init(&wtimer, repeate_foobar, 5., 1.);
 	ev_timer_start(EV_A_ &wtimer);
 
 	ev_run(EV_A_ 0);
 
-//cleanup:
 	pidfile_destory(pidfile);
+
 leave:
 	log_info("=================== -END- <<<<<<<<<<<<<<<<<<<");
 
