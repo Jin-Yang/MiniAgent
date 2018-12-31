@@ -59,6 +59,8 @@ int log_get_level(const char *level)
 {
 	if (level == NULL)
 		return -1;
+	else if (strcasecmp(level, "emerg") == 0)
+		return LOG_EMERG;
 	else if (strcasecmp(level, "alert") == 0)
 		return LOG_ALERT;
 	else if (strcasecmp(level, "error") == 0)

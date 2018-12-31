@@ -24,7 +24,7 @@ make %{?_smp_mflags}
 
 %install
 #/usr/bin/
-install -d -m 0751 %{buildroot}/%{_bindir}
+install -d -m 0751 %{buildroot}/%{_sbindir}
 cd build && make install DESTDIR=%{buildroot}
 #--- 4.1 scripts section
 %pre
